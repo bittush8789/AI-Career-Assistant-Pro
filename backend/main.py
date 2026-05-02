@@ -60,13 +60,7 @@ app.include_router(salary.router)
 app.include_router(jobs.router)
 app.include_router(dashboard.router)
 
-@app.post("/register", response_model=UserResponse)
-async def register(user: UserCreate):
-    return UserResponse(id=1, username=user.username, email=user.email, is_active=True)
 
-@app.post("/login", response_model=Token)
-async def login(user_data: UserCreate):
-    return {"access_token": "dummy_token_no_db", "token_type": "bearer"}
 
 @app.get("/dashboard/stats", response_model=DashboardStats)
 async def get_dashboard_stats():

@@ -36,26 +36,9 @@ function updateThemeIcon(theme) {
 const API_URL = 'http://localhost:8000';
 
 function getAuthHeaders() {
-    const token = localStorage.getItem('token');
     const selectedModel = localStorage.getItem('selectedModel') || 'llama3-70b-8192';
     return {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
         'X-Model-Name': selectedModel
     };
 }
-
-function checkAuth() {
-    const token = localStorage.getItem('token');
-    const isAuthPage = window.location.pathname.includes('login') || window.location.pathname.includes('register');
-    const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
-    
-    if (!token && !isAuthPage && !isIndexPage) {
-        window.location.href = 'login.html';
-    } else if (token && isAuthPage) {
-        window.location.href = 'dashboard.html';
-    }
-}
-
-// Run on load
-checkAuth();

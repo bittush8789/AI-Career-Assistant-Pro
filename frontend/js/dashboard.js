@@ -36,9 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (profileRes.ok) {
             const profile = await profileRes.json();
             document.getElementById('userNameDisplay').innerText = profile.username;
-        } else {
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
         }
 
         const statsRes = await fetch(`${API_URL}/dashboard/stats`, { headers: getAuthHeaders() });
@@ -73,12 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        window.location.href = 'login.html';
-    });
+
 
     // Helper to display results
     function showResult(elementId, data) {
@@ -279,7 +271,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const res = await fetch(`${API_URL}/resume/rewrite`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'X-Model-Name': localStorage.getItem('selectedModel') || 'llama3-70b-8192'
                 },
                 body: formData
@@ -450,7 +441,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const res = await fetch(`${API_URL}/cover-letter/upload-generate`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'X-Model-Name': localStorage.getItem('selectedModel') || 'llama3-70b-8192'
                 },
                 body: formData
