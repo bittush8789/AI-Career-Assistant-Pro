@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-career-config
+  namespace: ai-career
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  BACKEND_URL: "http://ai-career-service:8000"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ai-career-secrets
+  namespace: ai-career
+type: Opaque
+data:
+  # Base64 encoded values for production
+  GROQ_API_KEY: "WV9PVVJfR1JPUV9BUElfS0VZX0hFUkU=" # Example: YOUR_GROQ_API_KEY_HERE
+  DATABASE_URL: "cG9zdGdyZXM6Ly91c2VyOnBhc3NAdGhlLWRiOjU0MzIvZGI="
