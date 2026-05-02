@@ -6,6 +6,7 @@ passlib[bcrypt]
 python-multipart
 python-dotenv
 groq
-pydantic
+pydantic[email]
+email-validator
 pdfminer.six
 python-docx
