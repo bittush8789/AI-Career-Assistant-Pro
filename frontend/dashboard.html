@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Career Assistant Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="nav-brand"><i class="fa-solid fa-rocket"></i> CareerAI</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active" data-target="dashboard-home"><i class="fa-solid fa-house"></i> Dashboard</a>
+
+                <a href="#" class="sidebar-link" data-target="multi-job-analyzer"><i class="fa-solid fa-layer-group"></i> Multi-Job Analyzer <span style="background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; margin-left: 4px;">PRO</span></a>
+                <a href="#" class="sidebar-link" data-target="resume-rewrite"><i class="fa-solid fa-pen-nib"></i> Resume Rewrite</a>
+                <a href="#" class="sidebar-link" data-target="cover-letter"><i class="fa-solid fa-envelope-open-text"></i> Cover Letter</a>
+                <a href="#" class="sidebar-link" data-target="interview-prep"><i class="fa-solid fa-user-tie"></i> Interview Prep</a>
+                <a href="#" class="sidebar-link" data-target="career-roadmap"><i class="fa-solid fa-map-location-dot"></i> Career Roadmap</a>
+                <a href="#" class="sidebar-link" data-target="salary-predictor"><i class="fa-solid fa-money-bill-wave"></i> Salary Predictor</a>
+                <a href="#" class="sidebar-link" data-target="job-recommender"><i class="fa-solid fa-briefcase"></i> Jobs</a>
+            </nav>
+            <div style="margin-top: auto;">
+                <button class="theme-toggle" id="themeToggle" style="margin-bottom: 1rem;"><i class="fa-solid fa-moon"></i> Theme</button>
+                <a href="#" class="sidebar-link" id="logoutBtn" style="color: #ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <h2>Welcome, <span id="userNameDisplay">User</span></h2>
+                <div class="model-selection-wrapper" style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.05); padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <label for="modelSelect" style="font-weight: 600; font-size: 0.9rem; color: #94a3b8;"><i class="fa-solid fa-brain" style="color: #38bdf8; margin-right: 4px;"></i> AI Model:</label>
+                    <select id="modelSelect" style="padding: 0.4rem 0.75rem; border-radius: 8px; min-width: 260px; font-size: 0.9rem; cursor: pointer; background-color: #1e293b; color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.1); outline: none;">
+                        <option value="llama3-70b-8192">Loading models...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dashboard Home -->
+            <section id="dashboard-home" class="tool-section active">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--text-main);">Live Dashboard</h3>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); background: rgba(255, 255, 255, 0.05); padding: 0.4rem 0.8rem; border-radius: 6px;">
+                        <i class="fa-regular fa-clock"></i> Updated: <span id="stat-updated-time">Just now</span>
+                    </div>
+                </div>
+                
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                    <div class="stat-card glass-card" style="position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div class="stat-icon" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-info">
+                            <h4>Resume Score</h4>
+                            <p id="stat-resume-score" class="counter">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card" style="position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div class="stat-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="stat-info">
+                            <h4>Jobs Matched</h4>
+                            <p id="stat-jobs-matched" class="counter">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card" style="position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div class="stat-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);"><i class="fa-solid fa-coins"></i></div>
+                        <div class="stat-info">
+                            <h4>Salary Estimate</h4>
+                            <p id="stat-salary" style="font-size: 1.2rem;">Calculating...</p>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card" style="position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div class="stat-icon" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1);"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="stat-info">
+                            <h4>Best Match Role</h4>
+                            <p id="stat-best-role" style="font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Pending</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Multi-Job Analyzer -->
+            <section id="multi-job-analyzer" class="tool-section">
+                <div class="tool-card glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; gap: 0.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-layer-group" style="color: #8b5cf6; margin-right: 6px;"></i> Multi-Job Analyzer Pro</h3>
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Compare your resume against multiple job descriptions at once.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">1. Upload Resume</label>
+                        <div id="multi-drag-drop-box" class="drag-drop-area" style="border: 2px dashed #8b5cf6; border-radius: 12px; padding: 2.25rem; text-align: center; cursor: pointer; background: rgba(255, 255, 255, 0.02); margin-bottom: 1rem;">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #8b5cf6; margin-bottom: 0.75rem;"></i>
+                            <p style="font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Drag & drop your file here, or click to browse</p>
+                            <input type="file" id="multi-file-input" accept=".pdf,.docx" style="display: none;">
+                        </div>
+                        <div id="multi-file-info" style="display: none; align-items: center; justify-content: space-between; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); padding: 0.75rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-file-circle-check" style="color: #8b5cf6; margin-right: 8px;"></i> <span id="multi-file-name">filename.pdf</span></span>
+                            <button id="multi-clear-file" style="background: none; border: none; color: #ef4444; font-size: 1.15rem; cursor: pointer;"><i class="fa-solid fa-circle-xmark"></i></button>
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem;">OR</p>
+
+                    <div class="form-group">
+                        <textarea id="multi-text" class="form-control" rows="3" placeholder="Paste your resume text here..."></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">2. Add Target Jobs</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;" id="popular-roles-container">
+                            <button class="btn btn-outline pop-role-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" data-role="MLOps Engineer">MLOps</button>
+                            <button class="btn btn-outline pop-role-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" data-role="DevOps Engineer">DevOps</button>
+                            <button class="btn btn-outline pop-role-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" data-role="Cloud Engineer">Cloud</button>
+                            <button class="btn btn-outline pop-role-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" data-role="Python Developer">Python</button>
+                            <button class="btn btn-outline pop-role-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" data-role="AI Engineer">AI Engineer</button>
+                            <button class="btn btn-primary" id="btn-add-custom-job" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; background: #8b5cf6; border-color: #8b5cf6;"><i class="fa-solid fa-plus"></i> Add Custom</button>
+                        </div>
+
+                        <div id="jobs-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Job items will be added here -->
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button id="btn-analyze-multi" class="btn btn-primary" style="flex: 1; background-color: #8b5cf6; border-color: #8b5cf6; font-size: 1.1rem; padding: 1rem;"><i class="fa-solid fa-bolt"></i> Analyze Against All Jobs</button>
+                    </div>
+
+                    <div id="multi-loading" style="display: none; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-weight: 500; color: var(--text-muted);">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="color: #8b5cf6; font-size: 1.2rem;"></i> Running advanced multi-job analysis... (This may take a minute)
+                    </div>
+
+                    <div id="multi-result" style="display: none; margin-top: 2rem;">
+                        <!-- Results will go here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resume Rewrite -->
+            <section id="resume-rewrite" class="tool-section">
+                <div class="tool-card glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; gap: 0.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-pen-nib" style="color: var(--primary-color); margin-right: 6px;"></i> AI Resume Rewriter</h3>
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Rewrite and optimize your resume for a specific role.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Upload Resume (PDF / DOCX)</label>
+                        <div id="rewrite-drag-drop-box" class="drag-drop-area" style="border: 2px dashed var(--primary-color); border-radius: 12px; padding: 2.25rem; text-align: center; cursor: pointer; background: rgba(255, 255, 255, 0.02); margin-bottom: 1rem;">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.75rem;"></i>
+                            <p style="font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Drag & drop your file here, or click to browse</p>
+                            <p style="font-size: 0.825rem; color: var(--text-muted); font-weight: 400;">PDF and DOCX only</p>
+                            <input type="file" id="rewrite-file-input" accept=".pdf,.docx" style="display: none;">
+                        </div>
+                        <div id="rewrite-file-info" style="display: none; align-items: center; justify-content: space-between; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); padding: 0.75rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-file-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> <span id="rewrite-file-name">filename.pdf</span></span>
+                            <button id="rewrite-clear-file" style="background: none; border: none; color: #ef4444; font-size: 1.15rem; cursor: pointer;" title="Remove File"><i class="fa-solid fa-circle-xmark"></i></button>
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem;">OR</p>
+
+                    <div class="form-group">
+                        <textarea id="rewrite-text" class="form-control" rows="4" placeholder="Paste your resume text here..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div class="form-group">
+                            <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Target Role</label>
+                            <input type="text" id="rewrite-role" class="form-control" placeholder="e.g. MLOps Engineer">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Rewrite Style</label>
+                            <select id="rewrite-style" class="form-control">
+                                <option value="ATS Optimized">ATS Optimized</option>
+                                <option value="Professional">Professional</option>
+                                <option value="Senior Level">Senior Level</option>
+                                <option value="Remote Job Ready">Remote Job Ready</option>
+                                <option value="US Resume Style">US Resume Style</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Job Description</label>
+                        <textarea id="rewrite-jd" class="form-control" rows="4" placeholder="Paste target job description for ATS optimized rewrite."></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button id="btn-rewrite" class="btn btn-primary" style="flex: 1;"><i class="fa-solid fa-pen-fancy"></i> Rewrite Resume</button>
+                        <button id="btn-rewrite-clear" class="btn btn-outline">Clear</button>
+                    </div>
+
+                    <div id="rewrite-loading" style="display: none; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-weight: 500; color: var(--text-muted);">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary-color); font-size: 1.2rem;"></i> Rewriting your resume...
+                    </div>
+
+                    <div id="rewrite-result-container" style="display: none; margin-top: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <h4 style="font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-clipboard-check" style="color: var(--primary-color); margin-right: 6px;"></i> Rewritten Resume</h4>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button id="btn-rewrite-copy" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fa-regular fa-copy"></i> Copy</button>
+                                <button id="btn-rewrite-txt" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fa-solid fa-file-lines"></i> Download TXT</button>
+                                <button id="btn-rewrite-pdf" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Download PDF</button>
+                            </div>
+                        </div>
+                        <div id="rewrite-output" class="result-box" style="display: block; background: rgba(255, 255, 255, 0.01); border-radius: 12px; border: 1px solid var(--border-color); padding: 1.5rem; line-height: 1.65; color: var(--text-main); font-size: 0.975rem; min-height: 200px; white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cover Letter Generator (Fully Updated) -->
+            <section id="cover-letter" class="tool-section">
+                <div class="tool-card glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; gap: 0.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-envelope-open-text" style="color: var(--primary-color); margin-right: 6px;"></i> Cover Letter Generator</h3>
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Build a beautiful, customized, ATS-ready cover letter using AI in seconds.</p>
+                        </div>
+                    </div>
+
+                    <!-- Generation Mode Selector -->
+                    <div class="cl-modes-container" style="display: flex; gap: 1rem; margin: 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                        <button id="btn-mode-upload" class="btn btn-primary" style="flex: 1; text-align: center; font-size: 0.95rem;"><i class="fa-solid fa-file-arrow-up" style="margin-right: 6px;"></i> Resume Upload Mode</button>
+                        <button id="btn-mode-manual" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.95rem;"><i class="fa-solid fa-keyboard" style="margin-right: 6px;"></i> Manual Details Mode</button>
+                    </div>
+
+                    <!-- Mode 1: Resume Upload View -->
+                    <div id="cl-upload-mode-content" style="display: block;">
+                        <div class="form-group">
+                            <label for="cl-file-input" style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Upload Resume (PDF / DOCX) <span style="color: #ef4444;">*</span></label>
+                            <div id="cl-drag-drop-box" class="drag-drop-area" style="border: 2px dashed var(--primary-color); border-radius: 12px; padding: 2.25rem; text-align: center; cursor: pointer; background: rgba(255, 255, 255, 0.02); margin-bottom: 1rem;">
+                                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.75rem;"></i>
+                                <p id="cl-drag-drop-text" style="font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 0.25rem;">Drag & drop your file here, or click to browse</p>
+                                <p style="font-size: 0.825rem; color: var(--text-muted); font-weight: 400;">PDF and DOCX only (Max 5MB)</p>
+                                <input type="file" id="cl-file-input" accept=".pdf,.docx" style="display: none;">
+                            </div>
+                            <div id="cl-file-info" style="display: none; align-items: center; justify-content: space-between; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); padding: 0.75rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-main);"><i class="fa-solid fa-file-circle-check" style="color: var(--primary-color); margin-right: 8px;"></i> <span id="cl-file-name">filename.pdf</span></span>
+                                <button id="cl-clear-file" style="background: none; border: none; color: #ef4444; font-size: 1.15rem; cursor: pointer;" title="Remove File"><i class="fa-solid fa-circle-xmark"></i></button>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <label for="cl-target-role" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Target Role <span style="color: #ef4444;">*</span></label>
+                                <input type="text" id="cl-target-role" class="form-control" placeholder="e.g. Frontend UI/UX Designer" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cl-company-name" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Company Name <span style="color: #ef4444;">*</span></label>
+                                <input type="text" id="cl-company-name" class="form-control" placeholder="e.g. Google" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="cl-jd" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; color: var(--text-main);">Job Description (Optional)</label>
+                            <textarea id="cl-jd" class="form-control" rows="4" placeholder="Paste full or partial job description here to extract keywords and customize ATS matching..."></textarea>
+                        </div>
+
+                        <button id="btn-cl-upload" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; max-width: 320px; font-weight: 700;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Cover Letter
+                        </button>
+                        
+                        <div id="cl-upload-loading" style="display: none; align-items: center; gap: 0.5rem; margin-top: 1rem; font-weight: 500; color: var(--text-muted);">
+                            <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary-color); font-size: 1.2rem;"></i> Generating your personalized cover letter... Please wait.
+                        </div>
+
+                        <div id="cl-upload-result" style="display: none; margin-top: 2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <h4 style="font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-clipboard-check" style="color: var(--primary-color); margin-right: 6px;"></i> Personalized Cover Letter</h4>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button id="btn-cl-copy" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fa-regular fa-copy"></i> Copy</button>
+                                    <button id="btn-cl-pdf" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;"><i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Download PDF</button>
+                                </div>
+                            </div>
+                            <div id="cl-upload-output" class="result-box" style="display: block; background: rgba(255, 255, 255, 0.01); border-radius: 12px; border: 1px solid var(--border-color); padding: 1.5rem; line-height: 1.65; color: var(--text-main); font-size: 0.975rem; min-height: 200px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Mode 2: Manual Details View -->
+                    <div id="cl-manual-mode-content" style="display: none;" class="cl-form-container">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <input type="text" id="cl-name" class="form-control" placeholder="Your Name">
+                            <input type="text" id="cl-role" class="form-control" placeholder="Target Role">
+                            <input type="text" id="cl-company" class="form-control" placeholder="Target Company">
+                            <input type="text" id="cl-exp" class="form-control" placeholder="Experience (e.g. 3 years)">
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <textarea id="cl-skills" class="form-control" rows="3" placeholder="Key Skills..."></textarea>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <textarea id="cl-personalization" class="form-control" rows="2" placeholder="Personalization / Growth Details (e.g., how I helped previous company grow by 30%)"></textarea>
+                        </div>
+                        <button id="btn-cl" class="btn btn-primary" style="margin-top: 1rem;">Generate Cover Letter</button>
+                        <div id="cl-result" class="result-box"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Prep -->
+            <section id="interview-prep" class="tool-section">
+                <div class="tool-card glass-card">
+                    <h3>Mock Interview Generator</h3>
+                    <div class="form-group">
+                        <input type="text" id="int-role" class="form-control" placeholder="Role (e.g. DevOps Engineer)">
+                    </div>
+                    <button id="btn-int" class="btn btn-primary">Generate Questions</button>
+                    <div id="int-result" class="result-box"></div>
+                </div>
+            </section>
+
+            <!-- Career Roadmap -->
+            <section id="career-roadmap" class="tool-section">
+                <div class="tool-card glass-card">
+                    <h3>Career Roadmap Generator</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" id="rm-current" class="form-control" placeholder="Current Role (e.g. Junior Dev)">
+                        <input type="text" id="rm-target" class="form-control" placeholder="Target Role (e.g. Senior Backend)">
+                    </div>
+                    <button id="btn-rm" class="btn btn-primary" style="margin-top: 1rem;">Generate Roadmap</button>
+                    <div id="rm-result" class="result-box"></div>
+                </div>
+            </section>
+
+            <!-- Salary Predictor -->
+            <section id="salary-predictor" class="tool-section">
+                <div class="tool-card glass-card">
+                    <h3>Salary Predictor</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" id="sal-role" class="form-control" placeholder="Role">
+                        <input type="number" id="sal-exp" class="form-control" placeholder="Years of Experience">
+                        <input type="text" id="sal-country" class="form-control" placeholder="Country">
+                        <input type="text" id="sal-city" class="form-control" placeholder="City">
+                    </div>
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <input type="text" id="sal-skills" class="form-control" placeholder="Key Skills">
+                    </div>
+                    <button id="btn-sal" class="btn btn-primary">Predict Salary</button>
+                    <div id="sal-result" class="result-box"></div>
+                </div>
+            </section>
+            
+            <!-- Jobs Section -->
+            <section id="job-recommender" class="tool-section">
+                <div class="tool-card glass-card">
+                    <h3>Job Recommendation Engine</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" id="job-skills" class="form-control" placeholder="Your Skills">
+                        <input type="text" id="job-exp" class="form-control" placeholder="Experience Level">
+                        <input type="text" id="job-pref" class="form-control" placeholder="Preferred Role">
+                    </div>
+                    <button id="btn-job" class="btn btn-primary" style="margin-top: 1rem;">Get Recommendations</button>
+                    <div id="job-result" class="result-box"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
