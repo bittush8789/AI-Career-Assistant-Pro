@@ -408,11 +408,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 👤 Author
 
-**Developed with ❤️ by a Senior Software Architect**
+**Developed with ❤️ by a Ai & MLOps Engineer**
 
-- Portfolio: [YourPortfolio.com](https://yourportfolio.com)
-- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@yourusername](https://github.com/bittush8789)
 
 ---
 
